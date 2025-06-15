@@ -1,0 +1,11 @@
+# Root-level ignore
+/backend/node_modules/
+/backend/.env
+
+
+# Logs
+*.log
+npm-debug.log*
+
+# Ignore environment variables anywhere
+*.env
