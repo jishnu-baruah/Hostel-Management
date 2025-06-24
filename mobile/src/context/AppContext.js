@@ -270,21 +270,17 @@ export const AppProvider = ({ children }) => {
         });
       }
     } catch (error) {
-      console.error('Error loading unread notices count:', error);
+      // console.error('Error loading unread notices count:', error);
     }
   };
 
   const markNoticeAsRead = async (noticeId) => {
     try {
-      const response = await noticeAPI.markAsRead(noticeId);
-      if (response.data.success) {
-        dispatch({
-          type: APP_ACTIONS.MARK_NOTICE_READ,
-          payload: noticeId,
-        });
-      }
+      await noticeAPI.markAsRead(noticeId);
+      // Update unread count
+      loadUnreadNoticesCount();
     } catch (error) {
-      console.error('Error marking notice as read:', error);
+      // console.error('Error marking notice as read:', error);
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import RoomCard from './RoomCard';
@@ -12,7 +12,7 @@ const statusOptions = [
   { label: 'Available', value: ROOM_STATUS.AVAILABLE },
   { label: 'Occupied', value: ROOM_STATUS.OCCUPIED },
   { label: 'Maintenance', value: ROOM_STATUS.MAINTENANCE },
-  { label: 'Blocked', value: 'blocked' },
+  { label: 'Blocked', value: ROOM_STATUS.BLOCKED },
 ];
 
 const RoomList = ({ onEdit, onView, onAssign }) => {
@@ -24,27 +24,49 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
   const [floor, setFloor] = useState('');
   const [type, setType] = useState('');
 
-  const fetchRooms = async () => {
+  const fetchRooms = useCallback(async () => {
     setLoading(true);
     setError('');
     try {
       const params = {};
-      if (search) params.search = search;
+      if (search.trim()) params.search = search.trim();
       if (status) params.status = status;
-      if (floor) params.floor = floor;
-      if (type) params.roomType = type;
+      if (floor.trim()) params.floor = floor.trim();
+      if (type.trim()) params.roomType = type.trim();
+      
       const res = await roomAPI.getAllRooms(params);
       setRooms(res.data.rooms || []);
     } catch (err) {
+      // console.error('Error fetching rooms:', err);
       setError('Failed to load rooms');
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, status, floor, type]);
 
   useEffect(() => {
-    fetchRooms();
-  }, [search, status, floor, type]);
+    const timeoutId = setTimeout(() => {
+      fetchRooms();
+    }, 300); // Debounce search for 300ms
+
+    return () => clearTimeout(timeoutId);
+  }, [fetchRooms]);
+
+  const handleSearchChange = (text) => {
+    setSearch(text);
+  };
+
+  const handleStatusChange = (value) => {
+    setStatus(value);
+  };
+
+  const handleFloorChange = (text) => {
+    setFloor(text);
+  };
+
+  const handleTypeChange = (text) => {
+    setType(text);
+  };
 
   return (
     <View style={styles.container}>
@@ -52,7 +74,7 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
         <Input
           placeholder="Search by room number"
           value={search}
-          onChangeText={setSearch}
+          onChangeText={handleSearchChange}
           style={styles.input}
         />
         <View style={styles.row}>
@@ -60,7 +82,7 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
           <Picker
             selectedValue={status}
             style={styles.picker}
-            onValueChange={setStatus}
+            onValueChange={handleStatusChange}
           >
             {statusOptions.map(opt => (
               <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
@@ -70,7 +92,7 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
           <TextInput
             style={styles.floorInput}
             value={floor}
-            onChangeText={setFloor}
+            onChangeText={handleFloorChange}
             placeholder="Any"
             keyboardType="numeric"
           />
@@ -78,7 +100,7 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
           <TextInput
             style={styles.typeInput}
             value={type}
-            onChangeText={setType}
+            onChangeText={handleTypeChange}
             placeholder="Any"
           />
         </View>
@@ -102,6 +124,9 @@ const RoomList = ({ onEdit, onView, onAssign }) => {
           contentContainerStyle={{ paddingBottom: 80 }}
           refreshing={loading}
           onRefresh={fetchRooms}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No rooms found matching your criteria</Text>
+          }
         />
       )}
     </View>
@@ -156,6 +181,11 @@ const styles = StyleSheet.create({
   },
   error: {
     color: COLORS.error,
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  emptyText: {
+    color: COLORS.gray,
     textAlign: 'center',
     marginTop: 20,
   },

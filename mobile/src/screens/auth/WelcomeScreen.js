@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Image,
   SafeAreaView,
+  ImageBackground,
 } from 'react-native';
 import Button from '../../components/common/Button';
 import { COLORS, FONT_SIZES, SPACING } from '../../utils/constants';
@@ -23,88 +24,105 @@ const WelcomeScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        {/* Logo Section */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logoPlaceholder}>
-            <Text style={styles.logoText}>HM</Text>
-          </View>
-          <Text style={styles.appName}>Hostel Manager</Text>
-          <Text style={styles.tagline}>Simplifying Hostel Management</Text>
-        </View>
+    <ImageBackground 
+      source={require('../../../assets/bg.jpg')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay}>
+        <SafeAreaView style={styles.container}>
+          <View style={styles.content}>
+            {/* Logo Section */}
+            <View style={styles.logoContainer}>
+              <View style={styles.logoPlaceholder}>
+                <Text style={styles.logoText}>HM</Text>
+              </View>
+              <Text style={styles.appName}>Hostel Manager</Text>
+              <Text style={styles.tagline}>Simplifying Hostel Management</Text>
+            </View>
 
-        {/* Features Section */}
-        <View style={styles.featuresContainer}>
-          <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🏠</Text>
-            <Text style={styles.featureText}>Room Management</Text>
-          </View>
-          
-          <View style={styles.feature}>
-            <Text style={styles.featureIcon}>💳</Text>
-            <Text style={styles.featureText}>Easy Payments</Text>
-          </View>
-          
-          <View style={styles.feature}>
-            <Text style={styles.featureIcon}>📢</Text>
-            <Text style={styles.featureText}>Instant Notifications</Text>
-          </View>
-          
-          <View style={styles.feature}>
-            <Text style={styles.featureIcon}>🛠️</Text>
-            <Text style={styles.featureText}>Quick Complaints</Text>
-          </View>
-        </View>
+            {/* Features Section */}
+            <View style={styles.featuresContainer}>
+              <View style={styles.feature}>
+                <Text style={styles.featureIcon}>🏠</Text>
+                <Text style={styles.featureText}>Room Management</Text>
+              </View>
+              
+              <View style={styles.feature}>
+                <Text style={styles.featureIcon}>💳</Text>
+                <Text style={styles.featureText}>Easy Payments</Text>
+              </View>
+              
+              <View style={styles.feature}>
+                <Text style={styles.featureIcon}>📢</Text>
+                <Text style={styles.featureText}>Instant Notifications</Text>
+              </View>
+              
+              <View style={styles.feature}>
+                <Text style={styles.featureIcon}>🛠️</Text>
+                <Text style={styles.featureText}>Quick Complaints</Text>
+              </View>
+            </View>
 
-        {/* Buttons Section */}
-        <View style={styles.buttonContainer}>
-          <Button
-            title="Student Login"
-            onPress={handleStudentLogin}
-            variant="primary"
-            size="large"
-            fullWidth
-            icon="person"
-            style={styles.button}
-          />
-          
-          <Button
-            title="Admin Login"
-            onPress={handleAdminLogin}
-            variant="outline"
-            size="large"
-            fullWidth
-            icon="shield"
-            style={styles.button}
-          />
-          
-          <Button
-            title="New Student? Register Here"
-            onPress={handleRegister}
-            variant="ghost"
-            size="medium"
-            fullWidth
-            icon="person-add"
-            style={styles.registerButton}
-          />
-        </View>
+            {/* Buttons Section */}
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Student Login"
+                onPress={handleStudentLogin}
+                variant="primary"
+                size="large"
+                fullWidth
+                icon="person"
+                style={styles.button}
+              />
+              
+              <Button
+                title="Admin Login"
+                onPress={handleAdminLogin}
+                variant="secondary"
+                size="large"
+                fullWidth
+                icon="shield"
+                style={styles.button}
+              />
+              
+              <Button
+                title="New Student? Register Here"
+                onPress={handleRegister}
+                variant="primary"
+                size="medium"
+                fullWidth
+                icon="person-add"
+                style={styles.registerButton}
+              />
+            </View>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Secure • Reliable • Easy to Use
-          </Text>
-        </View>
+            {/* Footer */}
+            <View style={styles.footer}>
+              <Text style={styles.footerText}>
+                Secure • Reliable • Easy to Use
+              </Text>
+            </View>
+          </View>
+        </SafeAreaView>
       </View>
-    </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent overlay for better text readability
+  },
+  
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: 'transparent',
   },
   
   content: {
@@ -145,13 +163,13 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: FONT_SIZES.header,
     fontWeight: 'bold',
-    color: COLORS.black,
+    color: COLORS.white, // Changed to white for better contrast on dark background
     marginBottom: SPACING.sm,
   },
   
   tagline: {
     fontSize: FONT_SIZES.medium,
-    color: COLORS.gray,
+    color: COLORS.white, // Changed to white for better contrast on dark background
     textAlign: 'center',
   },
   
@@ -164,7 +182,7 @@ const styles = StyleSheet.create({
   
   feature: {
     width: '48%',
-    backgroundColor: COLORS.white,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent white background
     padding: SPACING.lg,
     borderRadius: 12,
     alignItems: 'center',
@@ -210,7 +228,7 @@ const styles = StyleSheet.create({
   
   footerText: {
     fontSize: FONT_SIZES.small,
-    color: COLORS.gray,
+    color: COLORS.white, // Changed to white for better contrast on dark background
     textAlign: 'center',
   },
 });

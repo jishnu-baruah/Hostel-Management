@@ -20,7 +20,7 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (error) {
-      console.error('Error getting token from storage:', error);
+      // console.error('Error getting token from storage:', error);
     }
     return config;
   },
@@ -70,7 +70,7 @@ export const studentAPI = {
 
 // Room API calls
 export const roomAPI = {
-  getAllRooms: () => api.get('/rooms'),
+  getAllRooms: (params = {}) => api.get('/rooms', { params }),
   getAvailableRooms: () => api.get('/rooms/available'),
   getRoomDetails: (roomId) => api.get(`/rooms/${roomId}`),
   assignRoom: (studentId, roomId) => api.put(`/rooms/${roomId}/assign`, { studentId }),
