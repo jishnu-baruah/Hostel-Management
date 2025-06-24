@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl, ImageBackground } from 'react-native';
 import { COLORS } from '../../utils/constants';
 import { useApp } from '../../context/AppContext';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,54 +16,71 @@ const AdminDashboard = ({ navigation }) => {
   const payments = dashboardData?.payments || 0;
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={
-        <RefreshControl
-          refreshing={!!loading?.dashboard}
-          onRefresh={loadDashboardData}
-        />
-      }
+    <ImageBackground 
+      source={require('../../../assets/bg.jpg')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
     >
-      <View style={styles.cardsRow}>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Students')}> 
-          <Ionicons name="people-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Students</Text>
-          <Text style={styles.cardValue}>{students}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Rooms')}> 
-          <Ionicons name="business-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Rooms</Text>
-          <Text style={styles.cardValue}>{rooms}</Text>
-        </TouchableOpacity>
+      <View style={styles.overlay}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={!!loading?.dashboard}
+              onRefresh={loadDashboardData}
+            />
+          }
+        >
+          <View style={styles.cardsRow}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Students')}> 
+              <Ionicons name="people-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Students</Text>
+              <Text style={styles.cardValue}>{students}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Rooms')}> 
+              <Ionicons name="business-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Rooms</Text>
+              <Text style={styles.cardValue}>{rooms}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardsRow}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Complaints')}> 
+              <Ionicons name="chatbubbles-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Complaints</Text>
+              <Text style={styles.cardValue}>{complaints}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Notices')}> 
+              <Ionicons name="megaphone-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Notices</Text>
+              <Text style={styles.cardValue}>{notices}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardsRow}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Payments')}> 
+              <Ionicons name="card-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Payments</Text>
+              <Text style={styles.cardValue}>{payments}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
-      <View style={styles.cardsRow}>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Complaints')}> 
-          <Ionicons name="chatbubbles-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Complaints</Text>
-          <Text style={styles.cardValue}>{complaints}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Notices')}> 
-          <Ionicons name="megaphone-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Notices</Text>
-          <Text style={styles.cardValue}>{notices}</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.cardsRow}>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Payments')}> 
-          <Ionicons name="card-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Payments</Text>
-          <Text style={styles.cardValue}>{payments}</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent overlay for better text readability
+  },
+  
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -93,7 +110,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent white background
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 8,

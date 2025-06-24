@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  ImageBackground,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useApp } from '../../context/AppContext';
@@ -30,44 +31,61 @@ const Dashboard = ({ navigation }) => {
   const payments = dashboardData?.payments || [];
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={fetchDashboardData} />
-      }
+    <ImageBackground 
+      source={require('../../../assets/bg.jpg')} 
+      style={styles.backgroundImage}
+      resizeMode="cover"
     >
-      <View style={styles.cardsRow}>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MyRoom')}> 
-          <Ionicons name="bed-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Room</Text>
-          <Text style={styles.cardValue}>{room ? room.roomNumber : 'Not Assigned'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Complaints')}> 
-          <Ionicons name="chatbubbles-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Complaints</Text>
-          <Text style={styles.cardValue}>{Array.isArray(complaints) ? complaints.length : complaints}</Text>
-        </TouchableOpacity>
+      <View style={styles.overlay}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={fetchDashboardData} />
+          }
+        >
+          <View style={styles.cardsRow}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('MyRoom')}> 
+              <Ionicons name="bed-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Room</Text>
+              <Text style={styles.cardValue}>{room ? room.roomNumber : 'Not Assigned'}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Complaints')}> 
+              <Ionicons name="chatbubbles-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Complaints</Text>
+              <Text style={styles.cardValue}>{Array.isArray(complaints) ? complaints.length : complaints}</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.cardsRow}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Notices')}> 
+              <Ionicons name="notifications-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Notices</Text>
+              <Text style={styles.cardValue}>{Array.isArray(notices) ? notices.length : notices}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Payments')}> 
+              <Ionicons name="card-outline" size={32} color={COLORS.primary} />
+              <Text style={styles.cardTitle}>Payments</Text>
+              <Text style={styles.cardValue}>{Array.isArray(payments) ? payments.length : payments}</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       </View>
-      <View style={styles.cardsRow}>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Notices')}> 
-          <Ionicons name="notifications-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Notices</Text>
-          <Text style={styles.cardValue}>{Array.isArray(notices) ? notices.length : notices}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Payments')}> 
-          <Ionicons name="card-outline" size={32} color={COLORS.primary} />
-          <Text style={styles.cardTitle}>Payments</Text>
-          <Text style={styles.cardValue}>{Array.isArray(payments) ? payments.length : payments}</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+  },
+  
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Semi-transparent overlay for better text readability
+  },
+  
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: 'transparent',
   },
   
   header: {
@@ -126,7 +144,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)', // Semi-transparent white background
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 8,
